@@ -6,8 +6,10 @@ Information and functions for the game state.
 */
 
 
-define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer, Events){
-		// Attempts to determine if touch events are supported
+define(['gamclee.misc', 'gamclee.timer', 'gamclee.events', 'gamclee.screen'], function(Misc, TimerClass, EventClass, ScreenClass){
+	var Timer = new TimerClass(), Events = new EventClass();
+	
+	// Attempts to determine if touch events are supported
 	var touchEventsSupported = function(){
 			return ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch);
 		},
@@ -30,8 +32,25 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
 			this.hasTouch = touchEventsSupported();
 			this.hasOrientation = orientationEventsSupported();
 			
+			this.states = [];
+			
+			// Perform some main init
 			this.init();
+			
+			// Set-up the screen
+			this.screen = new Screen(this.canvas);
 		};
+		
+	Gamclee.prototype.pushState(function(state){
+		this.states.push(state);
+		state.bindEvents();
+	});
+	
+	Gamclee.prototype.popState(function(){
+		var state = this.states[this.states.length - 1];
+		state.unbindEvents();
+		return this.states.pop();
+	});
 		
 	// Set up some (sane) browser defaults
 	Gamclee.prototype.init = function() {

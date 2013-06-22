@@ -5,6 +5,12 @@ Functions to get information about timing. Mostly for internal use.
 
 define(function(){
 	var Timer = function() {
+		// Singleton-- additional instances will always return the same thing.
+		if(Screen.prototype._singletonInstance) {
+			return Screen.prototype._singletonInstance;
+		}
+		Screen.prototype._singletonInstance = this;
+		
 		this.timeScale = 1;
 		this.startDate = new Date();
 	}
@@ -18,5 +24,5 @@ define(function(){
 			* this.timeScale;
 	}
 	
-	return new Timer();
+	return Timer;
 });

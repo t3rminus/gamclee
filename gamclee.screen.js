@@ -5,7 +5,9 @@ Description:
 Main screen turn on... It's you!
 */
 
-define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer, Events) {
+define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, TimerClass, EventClass) {
+	var Events = new EventClass(), Timer = new TimerClass();
+	
 	var Screen = function(canvas) {
 		// Singleton-- additional instances will always return the same thing.
 		if(Screen.prototype._singletonInstance) {
@@ -27,6 +29,9 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
 		// Bind native dom events
 		Events.addDomEventListener('blur', this.pause);
 		Events.addDomEventListener('focus', this.resume);
+		
+		// Start the "draw" loop
+		window.requestAnimationFrame(this.draw);
 	};
 	
 	Screen.prototype.getCanvas = function() {
@@ -73,10 +78,10 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
         }
 		
 		// Trigger main update
-		Events.triggerEvent('update', [this.lastFrameLength]);
+		Events.triggerEvent('gamclee.update', [this.lastFrameLength]);
 		
 		// Trigger main draw
-		Events.triggerEvent('draw', [this.lastFrameLength]);		
+		Events.triggerEvent('gamclee.draw', [this.lastFrameLength]);		
 	};
 	
 	Screen.prototype.getFPS = function() {
