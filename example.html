@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+</head>
+<body>
+	<canvas id="canvas" width="800" height="600"></canvas>
+	
+	<script src="require.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+	require(['gamclee.base', 'gamclee.state', 'gamclee.screen'], function(GamcleeClass,  StateClass, ScreenClass){
+		var gamclee = new GamcleeClass('canvas'), screen = new ScreenClass();
+		var myState = StateClass.extend({
+			draw: function(dt, canvas) {
+				var ctx = canvas.getContext('2d');
+				ctx.fillStyle = "#FFF";
+				ctx.fillRect (0, 0, screen.width, screen.height);
+				ctx.fillStyle = "#000";
+				ctx.font="20px Helvetica";
+				ctx.fillText("Hello World!",40,40);
+				ctx.fillStyle = "#F00";
+				ctx.font="20px Helvetica";
+				ctx.fillText(screen.getFPS(),40,60);
+			}
+		});
+		
+		gamclee.pushState(new myState());
+	});
+	</script>
+</body>
+</html>

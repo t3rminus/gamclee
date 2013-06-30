@@ -38,19 +38,19 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events', 'gamclee.screen'], fu
 			this.init();
 			
 			// Set-up the screen
-			this.screen = new Screen(this.canvas);
+			this.screen = new ScreenClass(this.canvas);
 		};
 		
-	Gamclee.prototype.pushState(function(state){
+	Gamclee.prototype.pushState = function(state){
 		this.states.push(state);
 		state.bindEvents();
-	});
+	};
 	
-	Gamclee.prototype.popState(function(){
+	Gamclee.prototype.popState = function(){
 		var state = this.states[this.states.length - 1];
 		state.unbindEvents();
 		return this.states.pop();
-	});
+	};
 		
 	// Set up some (sane) browser defaults
 	Gamclee.prototype.init = function() {

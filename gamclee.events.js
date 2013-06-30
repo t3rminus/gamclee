@@ -8,10 +8,10 @@ Binding and managing events
 define(['gamclee.misc'], function(Misc) {
 	var Events = function() {
 		// Singleton-- additional instances will always return the same thing.
-		if(Screen.prototype._singletonInstance) {
-			return Screen.prototype._singletonInstance;
+		if(Events.prototype._singletonInstance) {
+			return Events.prototype._singletonInstance;
 		}
-		Screen.prototype._singletonInstance = this;
+		Events.prototype._singletonInstance = this;
 		
 		this.events = {};
 		this.stopPropagation = {};
@@ -143,4 +143,4 @@ define(['gamclee.misc'], function(Misc) {
 	};
 	
 	return Events;
-}
+});

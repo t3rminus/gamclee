@@ -17,21 +17,31 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
 		
 		this.canvas = canvas;
 		
+		this.width = canvas.width;
+		this.height = canvas.height;
+		
 		this.isFullScreen = false;
-		this.frameLimit: 0.1;
-		this.pause: false;
-		this.lastFrameTime: -1;
-		this.lastFrameLength: 0;
-		this.lastFPSCheck: 0;
-		this.lastFPS: 0;
-		this.fpsCounter: 0;
+		this.frameLimit = 0.1;
+		this.pause = false;
+		this.lastFrameTime = -1;
+		this.lastFrameLength = 0;
+		this.lastFPSCheck = 0;
+		this.lastFPS = 0;
+		this.fpsCounter = 0;
 		
 		// Bind native dom events
 		Events.addDomEventListener('blur', this.pause);
 		Events.addDomEventListener('focus', this.resume);
 		
-		// Start the "draw" loop
-		window.requestAnimationFrame(this.draw);
+		// Set-up the "draw" loop
+		var objContext = this, drawHandler = function(){
+			// Schedule next frame draw
+			window.requestAnimationFrame(drawHandler);
+			// Call Screen.draw in the right context
+			objContext.draw.call(objContext);
+		};
+		// ...aaaand draw!
+		window.requestAnimationFrame(drawHandler);
 	};
 	
 	Screen.prototype.getCanvas = function() {
@@ -47,9 +57,6 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
 	};
 	
 	Screen.prototype.draw = function() {
-		// Schedule next frame draw
-        window.requestAnimationFrame(this.draw);
-
 		// If paused, do nothing!
         if(this.pause) {
             return;
@@ -77,11 +84,11 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
             this.lastFrameTime = 0;
         }
 		
+		// Trigger main draw
+		Events.triggerEvent('gamclee.draw', [this.lastFrameLength, this.canvas]);
+		
 		// Trigger main update
 		Events.triggerEvent('gamclee.update', [this.lastFrameLength]);
-		
-		// Trigger main draw
-		Events.triggerEvent('gamclee.draw', [this.lastFrameLength]);		
 	};
 	
 	Screen.prototype.getFPS = function() {
@@ -134,4 +141,4 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
     };
 	
 	return Screen;
-}
+});
