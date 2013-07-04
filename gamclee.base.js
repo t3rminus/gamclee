@@ -37,20 +37,47 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events', 'gamclee.screen'], fu
 			// Perform some main init
 			this.init();
 			
-			// Set-up the screen
+			// Set-up the screen (screen handles DRAW loop)
 			this.screen = new ScreenClass(this.canvas);
 		};
 		
 	Gamclee.prototype.pushState = function(state){
+		// Disable n - 1's event handling
+		var curState = this.getCurrentState();
+		curState && curState.unbindEvents();
+		
+		// Add n state
 		this.states.push(state);
+		
+		// Bind n's events
 		state.bindEvents();
 	};
 	
 	Gamclee.prototype.popState = function(){
-		var state = this.states[this.states.length - 1];
-		state.unbindEvents();
-		return this.states.pop();
+		// Disable n's event handling
+		var oldState = this.getCurrentState();
+		if(!oldState) {
+			return false;
+		}
+		oldState.unbindEvents();
+		
+		// Remove n state
+		this.states.pop();
+		
+		// Bind n - 1's (now n) events
+		this.getCurrentState().bindEvents();
+		
+		// Return previous state;
+		return oldState;
 	};
+	
+	Gamclee.prototype.getCurrentState = function() {
+		// Get state on top of stack
+		if(this.states.length) {
+			return this.states[this.states.length - 1];
+		}
+		return false;
+	}
 		
 	// Set up some (sane) browser defaults
 	Gamclee.prototype.init = function() {

@@ -15,14 +15,14 @@ define(['gamclee.misc', 'gamclee.events', 'gamclee.class'], function(Misc, Event
 		bindEvents: function() {
 			for(var idx in eventsList) {
 				if(this[eventsList[idx]]) {
-					Events.addEventListener('gamclee.'+eventsList[idx], this[eventsList[idx]]);
+					Events.addEventListener('gamclee.'+eventsList[idx], this[eventsList[idx]], 500);
 				}
 			}
 		},
 		unbindEvents: function() {
 			for(var idx in eventsList) {
 				if(this[eventsList[idx]]) {
-					Events.clearEventListener('gamclee.'+eventsList[idx], this[eventsList[idx]]);
+					Events.clearEventListener('gamclee.'+eventsList[idx], this[eventsList[idx]], 500);
 				}
 			}
 		}

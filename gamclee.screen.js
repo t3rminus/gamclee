@@ -47,10 +47,6 @@ define(['gamclee.misc', 'gamclee.timer', 'gamclee.events'], function(Misc, Timer
 		window.requestAnimationFrame(drawHandler);
 	};
 	
-	Screen.prototype.getCanvas = function() {
-		return this.canvas;
-	};
-	
 	Screen.prototype.hidden = function() {
 		this.pause();
 		this.isHidden = true;
